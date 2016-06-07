@@ -1020,7 +1020,7 @@ UHoudiniAssetInstanceInput::CloneComponentsAndAttachToActor(AActor* Actor)
 			// Copy visibility.
 			DuplicatedComponent->SetVisibility(InstancedStaticMeshComponent->IsVisible());
 
-			DuplicatedComponent->AttachTo(RootComponent);
+			DuplicatedComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 			DuplicatedComponent->RegisterComponent();
 			DuplicatedComponent->GetBodyInstance()->bAutoWeld = false;
 
