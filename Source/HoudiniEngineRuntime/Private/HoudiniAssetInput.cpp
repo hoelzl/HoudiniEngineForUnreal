@@ -752,7 +752,7 @@ UHoudiniAssetInput::PostLoad()
 	if(InputCurve)
 	{
 		InputCurve->SetHoudiniAssetInput(this);
-		InputCurve->AttachTo(HoudiniAssetComponent, NAME_None, EAttachLocation::KeepRelativeOffset);
+		InputCurve->AttachToComponent(HoudiniAssetComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	}
 }
 
@@ -893,13 +893,14 @@ UHoudiniAssetInput::DestroyInputCurve()
 	// If we have spline, delete it.
 	if(InputCurve)
 	{
-		InputCurve->DetachFromParent();
+		InputCurve->DetachFromComponent(FDetachmentTransformRules::KeepRelativeTransform);
 		InputCurve->UnregisterComponent();
 		InputCurve->DestroyComponent();
 
 		if(HoudiniAssetComponent)
 		{
-			HoudiniAssetComponent->AttachChildren.Remove(InputCurve);
+			// Should have been removed by DetachFromComponent() above.
+			check(!HoudiniAssetComponent->GetAttachChildren().Contains(InputCurve));
 		}
 
 		InputCurve = nullptr;
@@ -1142,7 +1143,7 @@ UHoudiniAssetInput::OnChoiceChange(TSharedPtr<FString> NewChoice, ESelectInfo::T
 					NewObject<UHoudiniSplineComponent>(this, UHoudiniSplineComponent::StaticClass(),
 						NAME_None, RF_Public | RF_Transactional);
 
-				HoudiniSplineComponent->AttachTo(HoudiniAssetComponent, NAME_None, EAttachLocation::KeepRelativeOffset);
+				HoudiniSplineComponent->AttachToComponent(HoudiniAssetComponent, FAttachmentTransformRules::KeepRelativeTransform);
 				HoudiniSplineComponent->RegisterComponent();
 				HoudiniSplineComponent->SetVisibility(true);
 				HoudiniSplineComponent->SetHoudiniAssetInput(this);
