@@ -212,7 +212,7 @@ UHoudiniHandleComponent::PostEditUndo()
 {
 	Super::PostEditUndo();
 
-	UHoudiniAssetComponent* AttachComponent = Cast<UHoudiniAssetComponent>(AttachParent);
+	UHoudiniAssetComponent* AttachComponent = Cast<UHoudiniAssetComponent>(GetAttachParent());
 	if(AttachComponent)
 	{
 		//UploadControlPoints();

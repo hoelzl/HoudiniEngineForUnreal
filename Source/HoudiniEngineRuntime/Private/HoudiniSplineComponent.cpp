@@ -67,7 +67,7 @@ UHoudiniSplineComponent::PostEditUndo()
 {
 	Super::PostEditUndo();
 
-	UHoudiniAssetComponent* AttachComponent = Cast<UHoudiniAssetComponent>(AttachParent);
+	UHoudiniAssetComponent* AttachComponent = Cast<UHoudiniAssetComponent>(GetAttachParent());
 	if(AttachComponent)
 	{
 		UploadControlPoints();
@@ -198,7 +198,7 @@ UHoudiniSplineComponent::UploadControlPoints()
 	else
 	{
 		// Grab component we are attached to.
-		UHoudiniAssetComponent* AttachComponent = Cast<UHoudiniAssetComponent>(AttachParent);
+		UHoudiniAssetComponent* AttachComponent = Cast<UHoudiniAssetComponent>(GetAttachParent());
 		if(HoudiniGeoPartObject.IsValid() && AttachComponent)
 		{
 			NodeId = HoudiniGeoPartObject.HapiGeoGetNodeId(AttachComponent->GetAssetId());

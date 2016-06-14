@@ -4768,8 +4768,13 @@ FHoudiniEngineUtils::ReplaceHoudiniActorWithBlueprint(UHoudiniAssetComponent* Ho
 						Scene->RelativeRotation = FRotator::ZeroRotator;
 
 						// Clear out the attachment info after having copied the properties from the source actor
-						Scene->AttachParent = nullptr;
-						Scene->AttachChildren.Empty();
+						for (auto* Child : Scene->GetAttachChildren())
+						{
+							Child->DetachFromComponent(FDetachmentTransformRules::KeepRelativeTransform);
+						}
+						Scene->DetachFromComponent(FDetachmentTransformRules::KeepRelativeTransform);
+						// Scene->AttachParent = nullptr;
+						// Scene->AttachChildren.Empty();
 
 						// Ensure the light mass information is cleaned up
 						Scene->InvalidateLightingCache();
@@ -7315,6 +7320,7 @@ FHoudiniEngineUtils::ExtractUniqueMaterialIds(const HAPI_AssetInfo& AssetInfo, T
 }
 
 
+#if WITH_EDITORONLY_DATA
 UMaterialExpression*
 FHoudiniEngineUtils::MaterialLocateExpression(UMaterialExpression* Expression, UClass* ExpressionClass)
 {
@@ -7375,6 +7381,7 @@ FHoudiniEngineUtils::MaterialLocateExpression(UMaterialExpression* Expression, U
 
 	return nullptr;
 }
+#endif
 
 
 AHoudiniAssetActor*
@@ -7566,6 +7573,7 @@ FHoudiniEngineUtils::GetHoudiniGeneratedNameFromMetaInformation(UPackage* Packag
 }
 
 
+#if WITH_EDITORONLY_DATA
 UStaticMesh*
 FHoudiniEngineUtils::DuplicateStaticMeshAndCreatePackage(UStaticMesh* StaticMesh, UHoudiniAssetComponent* Component,
 	const FHoudiniGeoPartObject& HoudiniGeoPartObject, bool bBake)
@@ -7644,7 +7652,6 @@ FHoudiniEngineUtils::DuplicateStaticMeshAndCreatePackage(UStaticMesh* StaticMesh
 	return DuplicatedStaticMesh;
 }
 
-
 UMaterial*
 FHoudiniEngineUtils::DuplicateMaterialAndCreatePackage(UMaterial* Material, UHoudiniAssetComponent* Component, 
 	const FString& SubMaterialName, bool bBake)
@@ -7692,7 +7699,7 @@ FHoudiniEngineUtils::DuplicateMaterialAndCreatePackage(UMaterial* Material, UHou
 
 	return DuplicatedMaterial;
 }
-
+#endif /* WITH_EDITORONLY_DATA */
 
 void
 FHoudiniEngineUtils::ReplaceDuplicatedMaterialTextureSample(UMaterialExpression* MaterialExpression,

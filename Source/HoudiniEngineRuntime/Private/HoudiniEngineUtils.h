@@ -319,10 +319,12 @@ public:
 	static UPackage* BakeCreateStaticMeshPackageForComponent(UHoudiniAssetComponent* HoudiniAssetComponent,
 		const FHoudiniGeoPartObject& HoudiniGeoPartObject, FString& MeshName, FGuid& BakeGUID, bool bBake = false);
 
+#if WITH_EDITORONLY_DATA
 	/** Duplicate a given static mesh. This will create a new package for it. This will also create necessary		**/
 	/** materials and textures and their corresponding packages. **/
 	static UStaticMesh* DuplicateStaticMeshAndCreatePackage(UStaticMesh* StaticMesh, UHoudiniAssetComponent* Component,
 		const FHoudiniGeoPartObject& HoudiniGeoPartObject, bool bBake = false);
+#endif
 
 protected:
 
@@ -354,10 +356,12 @@ protected:
 	static int32 TransferRegularPointAttributesToVertices(const TArray<int32>& VertexList,
 		const HAPI_AttributeInfo& AttribInfo, TArray<float>& Data);
 
+#if WITH_EDITORONLY_DATA
 	/** Duplicate a given material. This will create a new package for it. This will also create necessary textures **/
 	/** and their corresponding packages. **/
 	static UMaterial* DuplicateMaterialAndCreatePackage(UMaterial* Material, UHoudiniAssetComponent* Component,
 		const FString& SubMaterialName, bool bBake = false);
+#endif
 
 	/** Duplicate a given texture. This will create a new package for it. **/
 	static UTexture2D* DuplicateTextureAndCreatePackage(UTexture2D* Texture, UHoudiniAssetComponent* Component,
@@ -405,8 +409,10 @@ protected:
 		TSet<HAPI_MaterialId>& InstancerMaterialIds,
 		TMap<FHoudiniGeoPartObject, HAPI_MaterialId>& InstancerMaterialMap);
 
+#if WITH_EDITORONLY_DATA
 	/** Helper function to locate first Material expression of given class within given expression subgraph. **/
 	static UMaterialExpression* MaterialLocateExpression(UMaterialExpression* Expression, UClass* ExpressionClass);
+#endif
 
 	/** Pick vertex color from texture mip level. **/
 	static FColor PickVertexColorFromTextureMip(const uint8* MipBytes, FVector2D& UVCoord, int32 MipWidth,
